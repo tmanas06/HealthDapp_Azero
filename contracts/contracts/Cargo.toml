@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "health_records",
+    "zero_knowledge",
+    "ai_manager",
+    "access_control"
+]
