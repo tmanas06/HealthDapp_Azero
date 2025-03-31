@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -14,7 +13,10 @@ import {
   BarChart, 
   FileText, 
   Settings, 
-  Home 
+  Home,
+  Stethoscope,
+  UserCircle2,
+  Calendar
 } from "lucide-react";
 
 interface NavItem {
@@ -25,19 +27,28 @@ interface NavItem {
   path: string;
 }
 
-const Sidebar = () => {
+interface SidebarProps {
+  userType?: "patient" | "doctor";
+}
+
+const Sidebar = ({ userType = "patient" }: SidebarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname.split('/')[1] || "dashboard";
   
-  const navItems: NavItem[] = [
+  // Define base navigation items common to both user types
+  const baseNavItems: NavItem[] = [
     {
       title: "Dashboard",
       icon: <Home className="h-5 w-5" />,
       variant: currentPath === "dashboard" ? "default" : "ghost",
       active: currentPath === "dashboard",
       path: "/dashboard"
-    },
+    }
+  ];
+  
+  // Doctor-specific navigation items
+  const doctorNavItems: NavItem[] = [
     {
       title: "Patient Records",
       icon: <FileText className="h-5 w-5" />,
@@ -53,6 +64,49 @@ const Sidebar = () => {
       path: "/ai-predictor"
     },
     {
+      title: "Appointments",
+      icon: <Calendar className="h-5 w-5" />,
+      variant: currentPath === "appointments" ? "default" : "ghost",
+      active: currentPath === "appointments",
+      path: "/appointments"
+    }
+  ];
+  
+  // Patient-specific navigation items
+  const patientNavItems: NavItem[] = [
+    {
+      title: "My Health Records",
+      icon: <FileText className="h-5 w-5" />,
+      variant: currentPath === "patient-records" ? "default" : "ghost",
+      active: currentPath === "patient-records",
+      path: "/patient-records"
+    },
+    {
+      title: "Health Insights",
+      icon: <Activity className="h-5 w-5" />,
+      variant: currentPath === "ai-predictor" ? "default" : "ghost",
+      active: currentPath === "ai-predictor",
+      path: "/ai-predictor"
+    },
+    {
+      title: "My Doctors",
+      icon: <Stethoscope className="h-5 w-5" />,
+      variant: currentPath === "my-doctors" ? "default" : "ghost",
+      active: currentPath === "my-doctors",
+      path: "/my-doctors"
+    },
+    {
+      title: "Appointments",
+      icon: <Calendar className="h-5 w-5" />,
+      variant: currentPath === "appointments" ? "default" : "ghost",
+      active: currentPath === "appointments",
+      path: "/appointments"
+    }
+  ];
+  
+  // Security-related navigation items (common to both)
+  const securityNavItems: NavItem[] = [
+    {
       title: "Access Control",
       icon: <Lock className="h-5 w-5" />,
       variant: currentPath === "access-control" ? "default" : "ghost",
@@ -66,9 +120,6 @@ const Sidebar = () => {
       active: currentPath === "zero-knowledge",
       path: "/zero-knowledge"
     },
-  ];
-  
-  const secondaryNavItems: NavItem[] = [
     {
       title: "Identity Verification",
       icon: <UserCheck className="h-5 w-5" />,
@@ -90,6 +141,10 @@ const Sidebar = () => {
       active: currentPath === "key-management",
       path: "/key-management"
     },
+  ];
+  
+  // Admin-related navigation items (common to both)
+  const adminNavItems: NavItem[] = [
     {
       title: "Analytics",
       icon: <BarChart className="h-5 w-5" />,
@@ -105,6 +160,9 @@ const Sidebar = () => {
       path: "/system-settings"
     },
   ];
+
+  // Combine navigation items based on user type
+  const navItems = [...baseNavItems, ...(userType === "doctor" ? doctorNavItems : patientNavItems)];
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -123,7 +181,22 @@ const Sidebar = () => {
         </div>
         
         <ScrollArea className="flex-1 pb-4">
-          <div className="px-2 space-y-2">
+          <div className="px-2 space-y-1 mb-6">
+            {/* User Type Indicator */}
+            <div className="mb-2 px-3 py-2 rounded-md bg-sidebar-accent/30">
+              <div className="flex items-center">
+                {userType === "doctor" ? (
+                  <Stethoscope className="h-4 w-4 text-healthgreen-500 mr-2" />
+                ) : (
+                  <UserCircle2 className="h-4 w-4 text-healthblue-500 mr-2" />
+                )}
+                <span className="text-xs font-medium text-sidebar-foreground/80">
+                  {userType === "doctor" ? "Doctor Portal" : "Patient Portal"}
+                </span>
+              </div>
+            </div>
+            
+            {/* Main navigation */}
             {navItems.map((item) => (
               <Button
                 key={item.title}
@@ -143,10 +216,33 @@ const Sidebar = () => {
           
           <div className="mt-6 px-2">
             <h3 className="text-xs uppercase tracking-wider text-sidebar-foreground/50 px-3 mb-2">
-              System & Security
+              Security & Privacy
             </h3>
-            <div className="space-y-2">
-              {secondaryNavItems.map((item) => (
+            <div className="space-y-1">
+              {securityNavItems.map((item) => (
+                <Button
+                  key={item.title}
+                  variant={item.variant}
+                  size="sm"
+                  onClick={() => handleNavigation(item.path)}
+                  className={cn(
+                    "w-full justify-start h-10 px-3",
+                    item.active ? "bg-sidebar-primary text-primary-foreground" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  )}
+                >
+                  {item.icon}
+                  <span className="ml-3">{item.title}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-6 px-2">
+            <h3 className="text-xs uppercase tracking-wider text-sidebar-foreground/50 px-3 mb-2">
+              System
+            </h3>
+            <div className="space-y-1">
+              {adminNavItems.map((item) => (
                 <Button
                   key={item.title}
                   variant={item.variant}
