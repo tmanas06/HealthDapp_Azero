@@ -1,0 +1,14 @@
+[package]
+name = "ai_manager"  # or other contract name
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+aleph-zero-contracts = "0.1"
+aleph-zero-zkp = "0.1"
+scale = "5.0"
+scale-info = "2.0"
+ink = "4.0"

@@ -1,16 +1,12 @@
-[workspace]
-members = [
-    "health_records",
-    "zero_knowledge",
-    "ai_manager",
-    "access_control"
-]
-
-[workspace.package]
+[package]
+name = "health_records"  # or other contract name
 version = "0.1.0"
 edition = "2021"
 
-[workspace.dependencies]
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
 aleph-zero-contracts = { git = "https://github.com/aleph-zero/aleph-zero-contracts", branch = "master" }
 aleph-zero-zkp = { git = "https://github.com/aleph-zero/aleph-zero-zkp", branch = "master" }
 scale = "5.0"
