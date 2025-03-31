@@ -23,6 +23,7 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
+import Check from "./Check"; // Import the Check component
 
 const ZeroKnowledge = () => {
   const [isVerifying, setIsVerifying] = useState(false);
