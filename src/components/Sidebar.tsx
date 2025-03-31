@@ -3,6 +3,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useNavigate, useLocation } from "react-router-dom";
 import { 
   Activity, 
   Shield, 
@@ -21,41 +22,49 @@ interface NavItem {
   icon: React.ReactNode;
   variant: "default" | "ghost";
   active?: boolean;
+  path: string;
 }
 
 const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState("Dashboard");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname.split('/')[1] || "dashboard";
   
   const navItems: NavItem[] = [
     {
       title: "Dashboard",
       icon: <Home className="h-5 w-5" />,
-      variant: activeItem === "Dashboard" ? "default" : "ghost",
-      active: activeItem === "Dashboard",
+      variant: currentPath === "dashboard" ? "default" : "ghost",
+      active: currentPath === "dashboard",
+      path: "/dashboard"
     },
     {
       title: "Patient Records",
       icon: <FileText className="h-5 w-5" />,
-      variant: activeItem === "Patient Records" ? "default" : "ghost",
-      active: activeItem === "Patient Records",
+      variant: currentPath === "patient-records" ? "default" : "ghost",
+      active: currentPath === "patient-records",
+      path: "/patient-records"
     },
     {
       title: "AI Predictor",
       icon: <Activity className="h-5 w-5" />,
-      variant: activeItem === "AI Predictor" ? "default" : "ghost",
-      active: activeItem === "AI Predictor",
+      variant: currentPath === "ai-predictor" ? "default" : "ghost",
+      active: currentPath === "ai-predictor",
+      path: "/ai-predictor"
     },
     {
       title: "Access Control",
       icon: <Lock className="h-5 w-5" />,
-      variant: activeItem === "Access Control" ? "default" : "ghost",
-      active: activeItem === "Access Control",
+      variant: currentPath === "access-control" ? "default" : "ghost",
+      active: currentPath === "access-control",
+      path: "/access-control"
     },
     {
       title: "Zero Knowledge",
       icon: <Shield className="h-5 w-5" />,
-      variant: activeItem === "Zero Knowledge" ? "default" : "ghost",
-      active: activeItem === "Zero Knowledge",
+      variant: currentPath === "zero-knowledge" ? "default" : "ghost",
+      active: currentPath === "zero-knowledge",
+      path: "/zero-knowledge"
     },
   ];
   
@@ -63,34 +72,43 @@ const Sidebar = () => {
     {
       title: "Identity Verification",
       icon: <UserCheck className="h-5 w-5" />,
-      variant: activeItem === "Identity Verification" ? "default" : "ghost",
-      active: activeItem === "Identity Verification",
+      variant: currentPath === "identity-verification" ? "default" : "ghost",
+      active: currentPath === "identity-verification",
+      path: "/identity-verification"
     },
     {
       title: "Blockchain Records",
       icon: <Database className="h-5 w-5" />,
-      variant: activeItem === "Blockchain Records" ? "default" : "ghost",
-      active: activeItem === "Blockchain Records",
+      variant: currentPath === "blockchain-records" ? "default" : "ghost",
+      active: currentPath === "blockchain-records",
+      path: "/blockchain-records"
     },
     {
       title: "Key Management",
       icon: <Key className="h-5 w-5" />,
-      variant: activeItem === "Key Management" ? "default" : "ghost",
-      active: activeItem === "Key Management",
+      variant: currentPath === "key-management" ? "default" : "ghost",
+      active: currentPath === "key-management",
+      path: "/key-management"
     },
     {
       title: "Analytics",
       icon: <BarChart className="h-5 w-5" />,
-      variant: activeItem === "Analytics" ? "default" : "ghost",
-      active: activeItem === "Analytics",
+      variant: currentPath === "analytics" ? "default" : "ghost",
+      active: currentPath === "analytics",
+      path: "/analytics"
     },
     {
       title: "System Settings",
       icon: <Settings className="h-5 w-5" />,
-      variant: activeItem === "System Settings" ? "default" : "ghost",
-      active: activeItem === "System Settings",
+      variant: currentPath === "system-settings" ? "default" : "ghost",
+      active: currentPath === "system-settings",
+      path: "/system-settings"
     },
   ];
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
 
   return (
     <div className="group h-full flex flex-col bg-sidebar border-r">
@@ -111,7 +129,7 @@ const Sidebar = () => {
                 key={item.title}
                 variant={item.variant}
                 size="sm"
-                onClick={() => setActiveItem(item.title)}
+                onClick={() => handleNavigation(item.path)}
                 className={cn(
                   "w-full justify-start h-10 px-3",
                   item.active ? "bg-sidebar-primary text-primary-foreground" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -133,7 +151,7 @@ const Sidebar = () => {
                   key={item.title}
                   variant={item.variant}
                   size="sm"
-                  onClick={() => setActiveItem(item.title)}
+                  onClick={() => handleNavigation(item.path)}
                   className={cn(
                     "w-full justify-start h-10 px-3",
                     item.active ? "bg-sidebar-primary text-primary-foreground" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
