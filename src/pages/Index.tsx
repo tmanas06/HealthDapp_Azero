@@ -1,13 +1,36 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from "react";
+import Layout from "@/components/Layout";
+import Dashboard from "@/components/Dashboard";
+import PatientRecords from "@/components/PatientRecords";
+import AIPredictor from "@/components/AIPredictor";
+import AccessControl from "@/components/AccessControl";
+import ZeroKnowledge from "@/components/ZeroKnowledge";
 
 const Index = () => {
+  const [activeTab, setActiveTab] = useState("Dashboard");
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "Dashboard":
+        return <Dashboard />;
+      case "Patient Records":
+        return <PatientRecords />;
+      case "AI Predictor":
+        return <AIPredictor />;
+      case "Access Control":
+        return <AccessControl />;
+      case "Zero Knowledge":
+        return <ZeroKnowledge />;
+      default:
+        return <Dashboard />;
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <Layout>
+      {renderContent()}
+    </Layout>
   );
 };
 

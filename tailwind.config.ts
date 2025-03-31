@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,60 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Add health system specific colors
+				healthblue: {
+					DEFAULT: '#0EA5E9',
+					50: '#E0F5FE',
+					100: '#B3E5FC',
+					200: '#81D4FA',
+					300: '#4FC3F7',
+					400: '#29B6F6',
+					500: '#0EA5E9',
+					600: '#0993D3',
+					700: '#0882BD',
+					800: '#0670A6',
+					900: '#055E90',
+				},
+				healthgreen: {
+					DEFAULT: '#10B981',
+					50: '#ECFDF5',
+					100: '#D1FAE5',
+					200: '#A7F3D0',
+					300: '#6EE7B7',
+					400: '#34D399',
+					500: '#10B981',
+					600: '#059669',
+					700: '#047857',
+					800: '#065F46',
+					900: '#064E3B',
+				},
+				healthnavy: {
+					DEFAULT: '#1A1F2C',
+					50: '#F8F9FA',
+					100: '#E9ECEF',
+					200: '#DEE2E6',
+					300: '#CED4DA',
+					400: '#ADB5BD',
+					500: '#6C757D',
+					600: '#495057',
+					700: '#343A40',
+					800: '#212529',
+					900: '#1A1F2C',
+				},
+				healthorange: {
+					DEFAULT: '#F97316',
+					50: '#FFF7ED',
+					100: '#FFEDD5',
+					200: '#FED7AA',
+					300: '#FDBA74',
+					400: '#FB923C',
+					500: '#F97316',
+					600: '#EA580C',
+					700: '#C2410C',
+					800: '#9A3412',
+					900: '#7C2D12',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +138,16 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-slow': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-slow': 'pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 			}
 		}
 	},
