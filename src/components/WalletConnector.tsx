@@ -1,72 +1,76 @@
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
+declare global {
+  interface Window {
+    SubWallet?: {
+      request: (args: { method: string }) => Promise<string[]>;
+      isSubWallet: boolean;
+      isMetaMask: boolean;
+    };
+  }
+}
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { 
-  Wallet, 
-  UserCircle2, 
-  Stethoscope
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Wallet, UserCircle2, Stethoscope } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+console.log("WalletConnector Component Loaded");
 
 interface WalletAccount {
   address: string;
   type: "patient" | "doctor";
 }
 
-// Mock wallet connection function - would be replaced with real wallet integration
-const connectWallet = async (): Promise<string> => {
-  // Simulate wallet connection delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  
-  // Return mock wallet address
-  return "azero1qrx7kdlgner84kx9rz5vrzhnrzknp2t7rh8d9her7a85re77vhesfjkznm";
-};
-
 export function WalletConnector() {
   const navigate = useNavigate();
   const [isConnecting, setIsConnecting] = useState(false);
   const [activeTab, setActiveTab] = useState<"patient" | "doctor">("patient");
 
+  // Auto-detect SubWallet on load
+  useEffect(() => {
+    if (window.SubWallet) {
+      console.log("✅ SubWallet detected:", window.SubWallet);
+    } else {
+      console.warn("❌ SubWallet not installed");
+    }
+  }, []);
+
   const handleConnect = async () => {
     try {
       setIsConnecting(true);
-      const address = await connectWallet();
-      
-      // Store wallet info in localStorage (in a real app, use a secure state management)
+
+      if (!window.SubWallet) {
+        throw new Error("SubWallet is not installed.");
+      }
+
+      const accounts = await window.SubWallet.request({ method: "eth_requestAccounts" });
+
+      if (!accounts || accounts.length === 0) {
+        throw new Error("No accounts found.");
+      }
+
       const account: WalletAccount = {
-        address,
-        type: activeTab
+        address: accounts[0],
+        type: activeTab,
       };
-      
+
       localStorage.setItem("walletAccount", JSON.stringify(account));
-      
-      // Show success toast
+
       toast({
         title: "Wallet connected successfully",
-        description: `Connected as ${activeTab} with address: ${address.substring(0, 6)}...${address.substring(address.length - 4)}`,
+        description: `Connected as ${activeTab} with address: ${account.address.substring(0, 6)}...${account.address.slice(-4)}`,
       });
-      
-      // Redirect to dashboard
+
       navigate("/dashboard");
     } catch (error) {
+      console.error("❌ Connection Error:", error);
+
       toast({
         title: "Connection failed",
-        description: "Failed to connect wallet. Please try again.",
+        description: error.message || "Failed to connect wallet. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -119,11 +123,7 @@ export function WalletConnector() {
         </Tabs>
       </CardContent>
       <CardFooter>
-        <Button 
-          onClick={handleConnect} 
-          className="w-full" 
-          disabled={isConnecting}
-        >
+        <Button onClick={handleConnect} className="w-full" disabled={isConnecting}>
           <Wallet className="mr-2 h-4 w-4" />
           {isConnecting ? "Connecting..." : "Connect Wallet"}
         </Button>
