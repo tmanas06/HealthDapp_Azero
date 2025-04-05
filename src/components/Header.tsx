@@ -103,10 +103,10 @@ const Header = ({ walletAddress, evmAddress, userType }: HeaderProps) => {
               <Wallet className="mr-2 h-4 w-4" />
               Native: {formatAddress(walletAddress)}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <Wallet className="mr-2 h-4 w-4" />
               EVM: {formatAddress(evmAddress)}
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             {userType === "doctor" ? (
               <DropdownMenuItem>My Patients</DropdownMenuItem>
             ) : (
