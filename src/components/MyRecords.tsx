@@ -4,7 +4,12 @@ import { uploadToContract } from '../utils/uploadToContract'
 
 const pinata = new PinataSDK({
   pinataJwt: import.meta.env.VITE_PINATA_JWT,
-  pinataGateway: import.meta.env.VITE_GATEWAY_URL
+  pinataGateway: import.meta.env.VITE_GATEWAY_URL,
+  pinataApi: {
+    host: 'api.pinata.cloud',
+    protocol: 'https',
+    port: 443
+  }
 })
 
 const MyRecords = () => {
@@ -23,6 +28,8 @@ const MyRecords = () => {
 
     try {
       setUploadStatus('⏳ Uploading to IPFS...')
+      
+      // Use the official Pinata SDK method which handles CORS properly
       const upload = await pinata.upload.public.file(file)
 
       if (upload?.cid) {
