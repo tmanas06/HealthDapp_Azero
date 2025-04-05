@@ -204,7 +204,7 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
                 size="sm"
                 onClick={() => handleNavigation(item.path)}
                 className={cn(
-                  "w-full justify-start h-10 px-3",
+                  "w-full justify-start h-10 px-3 text-white",
                   item.active ? "bg-sidebar-primary text-primary-foreground" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 )}
               >
