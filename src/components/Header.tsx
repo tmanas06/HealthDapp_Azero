@@ -1,5 +1,6 @@
 
-import { Bell, Settings, LogOut, Wallet } from "lucide-react";
+import { Settings, LogOut, Wallet } from "lucide-react";
+import NotificationCard from "./NotificationCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
@@ -15,10 +16,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface HeaderProps {
   walletAddress?: string;
+  evmAddress?: string;
   userType?: "patient" | "doctor";
 }
 
-const Header = ({ walletAddress, userType }: HeaderProps) => {
+const Header = ({ walletAddress, evmAddress, userType }: HeaderProps) => {
   const navigate = useNavigate();
   
   const handleLogout = () => {
@@ -66,34 +68,19 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
       
       <div className="flex items-center gap-4">
         {walletAddress && (
-          <Button variant="outline" size="sm" className="hidden md:flex">
-            <Wallet className="mr-2 h-4 w-4" />
-            {formatAddress(walletAddress)}
-          </Button>
+          <div className="hidden md:flex gap-2">
+            <Button variant="outline" size="sm" title="Native Address">
+              <Wallet className="mr-2 h-4 w-4" />
+              {formatAddress(walletAddress)}
+            </Button>
+            <Button variant="outline" size="sm" title="EVM Address">
+              <Wallet className="mr-2 h-4 w-4" />
+              {formatAddress(evmAddress)}
+            </Button>
+          </div>
         )}
         
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute -top-1 -right-1 bg-healthorange-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">
-            3
-          </span>
-        </Button>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>System Settings</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Security</DropdownMenuItem>
-            <DropdownMenuItem>Notifications</DropdownMenuItem>
-            <DropdownMenuItem>Integrations</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <NotificationCard />
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -114,7 +101,11 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Wallet className="mr-2 h-4 w-4" />
-              {formatAddress(walletAddress)}
+              Native: {formatAddress(walletAddress)}
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Wallet className="mr-2 h-4 w-4" />
+              EVM: {formatAddress(evmAddress)}
             </DropdownMenuItem>
             {userType === "doctor" ? (
               <DropdownMenuItem>My Patients</DropdownMenuItem>

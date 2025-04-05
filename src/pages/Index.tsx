@@ -32,7 +32,7 @@ const tabToRoute: Record<string, string> = {
   "Blockchain Records": "/blockchain-records",
   "Key Management": "/key-management",
   "Analytics": "/analytics",
-  "System Settings": "/system-settings",
+  // "System Settings": "/system-settings",
   "My Doctors": "/my-doctors",
   "Appointments": "/appointments"
 };

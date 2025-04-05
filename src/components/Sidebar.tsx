@@ -146,13 +146,13 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
       active: currentPath === "analytics",
       path: "/analytics"
     },
-    {
-      title: "System Settings",
-      icon: <Settings className="h-5 w-5" />,
-      variant: currentPath === "system-settings" ? "default" : "ghost",
-      active: currentPath === "system-settings",
-      path: "/system-settings"
-    },
+    // {
+    //   title: "System Settings",
+    //   icon: <Settings className="h-5 w-5" />,
+    //   variant: currentPath === "system-settings" ? "default" : "ghost",
+    //   active: currentPath === "system-settings",
+    //   path: "/system-settings"
+    // },
   ];
 
   const navItems = [...baseNavItems, ...(userType === "doctor" ? doctorNavItems : patientNavItems)];

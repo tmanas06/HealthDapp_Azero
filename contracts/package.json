@@ -1,0 +1,23 @@
+{
+  "name": "healthchain-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for HealthChain dApp on Aleph Zero",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:testnet": "hardhat run scripts/deploy.ts --network alephzeroTestnet"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.4",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@types/node": "^20.8.2",
+    "ethers": "^6.8.0",
+    "hardhat": "^2.18.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
