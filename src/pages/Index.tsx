@@ -7,6 +7,7 @@ import PatientRecords from "@/components/PatientRecords";
 import AIPredictor from "@/components/AIPredictor";
 import AccessControl from "@/components/AccessControl";
 import ZeroKnowledge from "@/components/ZeroKnowledge";
+import MyRecords from "@/components/MyRecords";
 
 // Import the pages for extra navigation (memoized)
 const IdentityVerification = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Identity Verification</h1><p className="text-muted-foreground">Secure identity management for healthcare providers and patients</p></div>);
@@ -24,6 +25,7 @@ interface IndexProps {
 // Map tab names to routes for easier management
 const tabToRoute: Record<string, string> = {
   "Dashboard": "/dashboard",
+  "My Health Records": "/my-records",
   "Patient Records": "/patient-records",
   "AI Predictor": "/ai-predictor",
   "Access Control": "/access-control",
@@ -59,6 +61,8 @@ const Index = ({ initialTab = "Dashboard" }: IndexProps) => {
     switch (activeTab) {
       case "Dashboard":
         return <Dashboard key="dashboard" />;
+      case "My Health Records":
+        return <MyRecords key="my-records" />;
       case "Patient Records":
         return <PatientRecords key="patient-records" />;
       case "AI Predictor":

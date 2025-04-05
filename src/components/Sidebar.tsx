@@ -73,9 +73,9 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
     {
       title: "My Health Records",
       icon: <FileText className="h-5 w-5" />,
-      variant: currentPath === "patient-records" ? "default" : "ghost",
-      active: currentPath === "patient-records",
-      path: "/patient-records"
+      variant: currentPath === "my-records" ? "default" : "ghost",
+      active: currentPath === "my-records",
+      path: "/my-records"
     },
     {
       title: "Health Insights",

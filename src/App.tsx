@@ -39,6 +39,7 @@ const App = () => (
           <Route path="/system-settings" element={<Index initialTab="System Settings" />} />
           <Route path="/my-doctors" element={<Index initialTab="My Doctors" />} />
           <Route path="/appointments" element={<Index initialTab="Appointments" />} />
+          <Route path="/my-records" element={<Index initialTab="My Health Records" />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
