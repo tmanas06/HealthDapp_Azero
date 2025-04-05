@@ -110,9 +110,9 @@ const Header = ({ walletAddress, evmAddress, userType }: HeaderProps) => {
             {userType === "doctor" ? (
               <DropdownMenuItem>My Patients</DropdownMenuItem>
             ) : (
-              <DropdownMenuItem>My Medical Records</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/patient-records')}>My Medical Records</DropdownMenuItem>
             )}
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            {/* <DropdownMenuItem>Settings</DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
