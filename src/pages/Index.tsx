@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useCallback, memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -7,6 +6,7 @@ import PatientRecords from "@/components/PatientRecords";
 import AIPredictor from "@/components/AIPredictor";
 import AccessControl from "@/components/AccessControl";
 import ZeroKnowledge from "@/components/ZeroKnowledge";
+import Appointments from "@/components/Appointments";
 
 // Import the pages for extra navigation (memoized)
 const IdentityVerification = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Identity Verification</h1><p className="text-muted-foreground">Secure identity management for healthcare providers and patients</p></div>);
@@ -14,9 +14,8 @@ const BlockchainRecords = memo(() => <div className="space-y-6"><h1 className="t
 const KeyManagement = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Key Management</h1><p className="text-muted-foreground">Manage encryption keys and access control</p></div>);
 const Analytics = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Analytics</h1><p className="text-muted-foreground">Healthcare data insights and trends</p></div>);
 const SystemSettings = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">System Settings</h1><p className="text-muted-foreground">Configure system parameters and preferences</p></div>);
-const MyDoctors = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">My Doctors</h1><p className="text-muted-foreground">View and manage your connected healthcare providers</p></div>);
-const Appointments = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Appointments</h1><p className="text-muted-foreground">Schedule and manage your medical appointments</p></div>);
-
+// const MyDoctors = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">My Doctors</h1><p className="text-muted-foreground">View and manage your connected healthcare providers</p></div>);
+import MyDoctors from "@/components/MyDoctors";
 interface IndexProps {
   initialTab?: string;
 }
