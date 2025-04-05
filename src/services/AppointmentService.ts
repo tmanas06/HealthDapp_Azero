@@ -1,146 +1,73 @@
 import { ethers } from 'ethers';
-import { create } from 'ipfs-http-client';
-
 import AppointmentManagerABI from '../../contracts/artifacts/contracts/appointment_manager/AppointmentManager.sol/AppointmentManager.json';
-import AppointmentNFTABI from '../../contracts/artifacts/contracts/appointment_manager/AppointmentNFT.sol/AppointmentNFT.json';
-
-const projectId = '9fa5816cea614bb10e61';
-const projectSecret = 'ccfc8a4eb6fac3b41d29eaa095e579010c408086108ce93ea95daf00a663222b';
-const auth = 'Basic ' + Buffer.from(`${projectId}:${projectSecret}`).toString('base64');
-
-const ipfsClient = create({
-  host: 'ipfs.infura.io',
-  port: 5001,
-  protocol: 'https',
-  headers: {
-    authorization: auth
-  }
-});
 
 export interface AppointmentData {
   date: string;
   time: string;
   doctorId: string;
-  reason: string;
-  notes: string;
 }
 
 export class AppointmentService {
   private provider: ethers.BrowserProvider;
   private signer: ethers.Signer | null;
   private appointmentManagerContract: ethers.Contract | null;
-  private appointmentNFTContract: ethers.Contract | null;
 
   constructor() {
     this.provider = new ethers.BrowserProvider((window as any).ethereum);
     this.signer = null;
     this.appointmentManagerContract = null;
-    this.appointmentNFTContract = null;
   }
 
   async initialize() {
     try {
       this.signer = await this.provider.getSigner();
 
-      // Replace with actual Remix deployed addresses
-      const appointmentManagerAddress = '0xYourAppointmentManagerAddressHere';
-      const appointmentNFTAddress = '0xYourAppointmentNFTAddressHere';
+      // ✅ Replace this with your Remix-deployed contract address on Aleph Zero Testnet
+      const appointmentManagerAddress = '0xYourAppointmentManagerAddress';
 
       this.appointmentManagerContract = new ethers.Contract(
         appointmentManagerAddress,
         AppointmentManagerABI.abi,
         this.signer
       );
-
-      this.appointmentNFTContract = new ethers.Contract(
-        appointmentNFTAddress,
-        AppointmentNFTABI.abi,
-        this.signer
-      );
     } catch (error) {
-      console.error('Error initializing AppointmentService:', error);
+      console.error('Initialization failed:', error);
       throw error;
     }
   }
 
-  async uploadToIPFS(appointmentData: AppointmentData) {
-    try {
-      const metadata = {
-        ...appointmentData,
-        timestamp: new Date().toISOString()
-      };
-
-      const { cid } = await ipfsClient.add(JSON.stringify(metadata));
-      return cid.toString();
-    } catch (error) {
-      console.error('Error uploading to IPFS:', error);
-      throw error;
-    }
-  }
-
-  async bookAppointment(appointmentData: AppointmentData) {
+  async bookBasicAppointment(data: AppointmentData) {
     if (!this.appointmentManagerContract || !this.signer) {
-      throw new Error('AppointmentService not properly initialized');
+      throw new Error('AppointmentService not initialized');
     }
 
     try {
-      const ipfsHash = await this.uploadToIPFS(appointmentData);
-
-      const appointmentDateTime = new Date(`${appointmentData.date}T${appointmentData.time}`);
+      const appointmentDateTime = new Date(`${data.date}T${data.time}`);
       const timestamp = Math.floor(appointmentDateTime.getTime() / 1000);
 
-      const doctor = await this.appointmentManagerContract.doctors(appointmentData.doctorId);
+      // ✅ Get doctor details to fetch fee
+      const doctor = await this.appointmentManagerContract.doctors(data.doctorId);
       const consultationFee = doctor.consultationFee;
 
+      // ✅ Call bookAppointment with empty string for IPFS hash
       const tx = await this.appointmentManagerContract.bookAppointment(
-        appointmentData.doctorId,
+        data.doctorId,
         timestamp,
-        ipfsHash,
+        '', // Empty IPFS hash
         { value: consultationFee }
       );
 
       const receipt = await tx.wait();
 
-      const appointmentId = receipt.events?.find(
-        (event: any) => event.event === 'AppointmentBooked'
-      )?.args?.appointmentId;
+      const event = receipt.events?.find((e: any) => e.event === 'AppointmentBooked');
+      const appointmentId = event?.args?.appointmentId;
 
       return {
         appointmentId,
-        ipfsHash,
         transactionHash: receipt.hash
       };
     } catch (error) {
       console.error('Error booking appointment:', error);
-      throw error;
-    }
-  }
-
-  async getAppointmentDetails(appointmentId: number) {
-    if (!this.appointmentManagerContract) {
-      throw new Error('AppointmentService not properly initialized');
-    }
-
-    try {
-      const appointment = await this.appointmentManagerContract.appointments(appointmentId);
-      return appointment;
-    } catch (error) {
-      console.error('Error fetching appointment details:', error);
-      throw error;
-    }
-  }
-
-  async cancelAppointment(appointmentId: number) {
-    if (!this.appointmentManagerContract) {
-      throw new Error('AppointmentService not properly initialized');
-    }
-
-    try {
-      const tx = await this.appointmentManagerContract.cancelAppointment(appointmentId);
-      await tx.wait();
-      return tx.hash;
-    } catch (error) {
-      console.error('Error cancelling appointment:', error);
       throw error;
     }
   }
