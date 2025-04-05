@@ -6,11 +6,10 @@ import PatientRecords from "@/components/PatientRecords";
 import AIPredictor from "@/components/AIPredictor";
 import AccessControl from "@/components/AccessControl";
 import ZeroKnowledge from "@/components/ZeroKnowledge";
-<<<<<<< HEAD
+
 import Appointments from "@/components/Appointments";
-=======
+
 import MyRecords from "@/components/MyRecords";
->>>>>>> 72031f79be12becfcb30b718de7d7003ee95e2b8
 
 // Import the pages for extra navigation (memoized)
 const IdentityVerification = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Identity Verification</h1><p className="text-muted-foreground">Secure identity management for healthcare providers and patients</p></div>);
