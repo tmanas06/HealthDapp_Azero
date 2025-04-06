@@ -1,11 +1,38 @@
 import { useEffect, useState, useCallback, memo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Layout from "@/components/Layout";
-import Dashboard from "@/components/Dashboard";
-import PatientRecords from "@/components/PatientRecords";
-import AIPredictor from "@/components/AIPredictor";
-import AccessControl from "@/components/AccessControl";
-import ZeroKnowledge from "@/components/ZeroKnowledge";
+import Layout from "../components/Layout";
+import Dashboard from "../components/Dashboard";
+import PatientRecords from "../components/PatientRecords";
+import AIPredictor from "../components/AIPredictor";
+import AccessControl from "../components/AccessControl";
+import ZeroKnowledge from "../components/ZeroKnowledge";
+import MyDoctors from "../components/my-doctors";
+import Appointments from "../components/appointment";
+import Profile from "../components/Profile";
+import SecuritySettingsPage from "../components/Security";
+import IdentityVerification from "../components/IdentityManagement";
+import BlockchainRecords from "../components/BlockchainRecords";
+import KeyManagement from "../components/KeyManagement";
+
+const Analytics = memo(() => (
+  <div className="space-y-6">
+    <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
+    <p className="text-muted-foreground">
+      Healthcare data insights and trends
+    </p>
+  </div>
+));
+
+
+const SystemSettings = memo(() => (
+  <div className="space-y-6">
+    <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
+    <p className="text-muted-foreground">
+      Configure system parameters and preferences
+    </p>
+  </div>
+));
+
 
 import Appointments from "@/components/Appointments";
 
@@ -19,14 +46,19 @@ const Analytics = memo(() => <div className="space-y-6"><h1 className="text-3xl 
 const SystemSettings = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">System Settings</h1><p className="text-muted-foreground">Configure system parameters and preferences</p></div>);
 // const MyDoctors = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">My Doctors</h1><p className="text-muted-foreground">View and manage your connected healthcare providers</p></div>);
 import MyDoctors from "@/components/MyDoctors";
+
 interface IndexProps {
   initialTab?: string;
 }
 
 // Map tab names to routes for easier management
 const tabToRoute: Record<string, string> = {
+
+  Dashboard: "/dashboard",
+
   "Dashboard": "/dashboard",
   "My Health Records": "/my-records",
+
   "Patient Records": "/patient-records",
   "AI Predictor": "/ai-predictor",
   "Access Control": "/access-control",
@@ -34,10 +66,17 @@ const tabToRoute: Record<string, string> = {
   "Identity Verification": "/identity-verification",
   "Blockchain Records": "/blockchain-records",
   "Key Management": "/key-management",
+
+  Analytics: "/analytics",
+  "System Settings": "/system-settings",
+
   "Analytics": "/analytics",
   // "System Settings": "/system-settings",
+
   "My Doctors": "/my-doctors",
-  "Appointments": "/appointments"
+  Appointments: "/appointments",
+  Profile: "/profile",
+  Security: "/security",
 };
 
 // Convert route to tab name
@@ -86,6 +125,10 @@ const Index = ({ initialTab = "Dashboard" }: IndexProps) => {
         return <MyDoctors key="my-doctors" />;
       case "Appointments":
         return <Appointments key="appointments" />;
+      case "Profile":
+        return <Profile key="profile" />;
+      case "Security":
+        return <SecuritySettingsPage key="security" />;
       default:
         return <Dashboard key="dashboard-default" />;
     }
