@@ -1,5 +1,11 @@
+
 import { LogOut, Wallet, User, Shield } from "lucide-react";
 import { Notification } from "@/components/ui/notification";
+
+
+import { Settings, LogOut, Wallet } from "lucide-react";
+import NotificationCard from "./NotificationCard";
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
@@ -15,10 +21,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface HeaderProps {
   walletAddress?: string;
+  evmAddress?: string;
   userType?: "patient" | "doctor";
 }
 
-const Header = ({ walletAddress, userType }: HeaderProps) => {
+const Header = ({ walletAddress, evmAddress, userType }: HeaderProps) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -64,13 +71,24 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
 
       <div className="flex items-center gap-4">
         {walletAddress && (
-          <Button variant="outline" size="sm" className="hidden md:flex">
-            <Wallet className="mr-2 h-4 w-4" />
-            {formatAddress(walletAddress)}
-          </Button>
+          <div className="hidden md:flex gap-2">
+            <Button variant="outline" size="sm" title="Native Address">
+              <Wallet className="mr-2 h-4 w-4" />
+              {formatAddress(walletAddress)}
+            </Button>
+            <Button variant="outline" size="sm" title="EVM Address">
+              <Wallet className="mr-2 h-4 w-4" />
+              {formatAddress(evmAddress)}
+            </Button>
+          </div>
         )}
 
+
         <Notification />
+
+
+        
+        <NotificationCard />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -89,8 +107,9 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Wallet className="mr-2 h-4 w-4" />
-              {formatAddress(walletAddress)}
+              Native: {formatAddress(walletAddress)}
             </DropdownMenuItem>
+
             <DropdownMenuItem onClick={() => navigate("/Profile")}>
               <User className="mr-2 h-4 w-4" />
               Profile
@@ -99,15 +118,27 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
               <Shield className="mr-2 h-4 w-4" />
               Security
             </DropdownMenuItem>
+
+            {/* <DropdownMenuItem>
+              <Wallet className="mr-2 h-4 w-4" />
+              EVM: {formatAddress(evmAddress)}
+            </DropdownMenuItem> */}
+
             {userType === "doctor" ? (
               <DropdownMenuItem onClick={() => navigate("/patients")}>
                 My Patients
               </DropdownMenuItem>
             ) : (
+
               <DropdownMenuItem onClick={() => navigate("/medical-records")}>
                 My Medical Records
               </DropdownMenuItem>
             )}
+
+              <DropdownMenuItem onClick={() => navigate('/patient-records')}>My Medical Records</DropdownMenuItem>
+            )}
+            {/* <DropdownMenuItem>Settings</DropdownMenuItem> */}
+
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />

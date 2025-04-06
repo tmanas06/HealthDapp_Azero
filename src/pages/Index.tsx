@@ -23,6 +23,7 @@ const Analytics = memo(() => (
   </div>
 ));
 
+
 const SystemSettings = memo(() => (
   <div className="space-y-6">
     <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
@@ -32,13 +33,32 @@ const SystemSettings = memo(() => (
   </div>
 ));
 
+
+import Appointments from "@/components/Appointments";
+
+import MyRecords from "@/components/MyRecords";
+
+// Import the pages for extra navigation (memoized)
+const IdentityVerification = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Identity Verification</h1><p className="text-muted-foreground">Secure identity management for healthcare providers and patients</p></div>);
+const BlockchainRecords = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Blockchain Records</h1><p className="text-muted-foreground">View and manage blockchain transaction history</p></div>);
+const KeyManagement = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Key Management</h1><p className="text-muted-foreground">Manage encryption keys and access control</p></div>);
+const Analytics = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">Analytics</h1><p className="text-muted-foreground">Healthcare data insights and trends</p></div>);
+const SystemSettings = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">System Settings</h1><p className="text-muted-foreground">Configure system parameters and preferences</p></div>);
+// const MyDoctors = memo(() => <div className="space-y-6"><h1 className="text-3xl font-bold tracking-tight">My Doctors</h1><p className="text-muted-foreground">View and manage your connected healthcare providers</p></div>);
+import MyDoctors from "@/components/MyDoctors";
+
 interface IndexProps {
   initialTab?: string;
 }
 
 // Map tab names to routes for easier management
 const tabToRoute: Record<string, string> = {
+
   Dashboard: "/dashboard",
+
+  "Dashboard": "/dashboard",
+  "My Health Records": "/my-records",
+
   "Patient Records": "/patient-records",
   "AI Predictor": "/ai-predictor",
   "Access Control": "/access-control",
@@ -46,8 +66,13 @@ const tabToRoute: Record<string, string> = {
   "Identity Verification": "/identity-verification",
   "Blockchain Records": "/blockchain-records",
   "Key Management": "/key-management",
+
   Analytics: "/analytics",
   "System Settings": "/system-settings",
+
+  "Analytics": "/analytics",
+  // "System Settings": "/system-settings",
+
   "My Doctors": "/my-doctors",
   Appointments: "/appointments",
   Profile: "/profile",
@@ -76,6 +101,8 @@ const Index = ({ initialTab = "Dashboard" }: IndexProps) => {
     switch (activeTab) {
       case "Dashboard":
         return <Dashboard key="dashboard" />;
+      case "My Health Records":
+        return <MyRecords key="my-records" />;
       case "Patient Records":
         return <PatientRecords key="patient-records" />;
       case "AI Predictor":

@@ -1,9 +1,10 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+
 import { Wallet, UserCircle2, Stethoscope, ChevronDown } from "lucide-react";
+
 import {
   Card, CardContent, CardDescription, CardFooter,
   CardHeader, CardTitle,
@@ -21,6 +22,7 @@ import { web3Enable, web3Accounts } from "@polkadot/extension-dapp";
 interface WalletAccount {
   address: string;
   type: "patient" | "doctor";
+
   walletProvider: "phantom" | "subwallet" | "metamask";
 }
 
@@ -44,6 +46,12 @@ const connectPhantomWallet = async (): Promise<string | null> => {
   return resp.publicKey.toString();
 };
 
+
+  walletProvider: "subwallet";
+}
+
+// ====== Wallet Connectors ======
+
 const connectSubWallet = async (): Promise<string | null> => {
   const extensions = await web3Enable("HealthChain Sentinel");
   if (extensions.length === 0) {
@@ -66,6 +74,7 @@ const connectSubWallet = async (): Promise<string | null> => {
   }
 
   return accounts[0].address;
+
 };
 
 const connectMetaMask = async (): Promise<string | null> => {
@@ -86,6 +95,7 @@ const connectMetaMask = async (): Promise<string | null> => {
 
   const accounts = await ethereum.request({ method: "eth_requestAccounts" });
   return accounts?.[0] || null;
+
 };
 
 // ====== Main Component ======
@@ -93,12 +103,17 @@ export function WalletConnector() {
   const navigate = useNavigate();
   const [isConnecting, setIsConnecting] = useState(false);
   const [activeTab, setActiveTab] = useState<"patient" | "doctor">("patient");
+
   const [walletProvider, setWalletProvider] = useState<"phantom" | "subwallet" | "metamask">("subwallet");
+
+  const [walletProvider, setWalletProvider] = useState<"subwallet">("subwallet");
+
 
   const handleConnect = async () => {
     try {
       setIsConnecting(true);
       let address: string | null = null;
+
 
       switch (walletProvider) {
         case "phantom":
@@ -112,6 +127,10 @@ export function WalletConnector() {
           break;
         default:
           break;
+
+      if (walletProvider === "subwallet") {
+        address = await connectSubWallet();
+
       }
 
       if (!address) throw new Error("Connection failed");
@@ -189,14 +208,22 @@ export function WalletConnector() {
         {/* Wallet Type Selector */}
         <div className="mt-6">
           <label className="block text-sm font-medium text-gray-700 mb-1">Select Wallet</label>
+
           <Select value={walletProvider} onValueChange={(val: "phantom" | "subwallet" | "metamask") => setWalletProvider(val)}>
+
+          <Select value={walletProvider} onValueChange={(val: "subwallet") => setWalletProvider(val)}>
+
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
+
               <SelectItem value="subwallet">SubWallet (Polkadot)</SelectItem>
               <SelectItem value="phantom">Phantom (Solana)</SelectItem>
               <SelectItem value="metamask">MetaMask (Ethereum)</SelectItem>
+
+              <SelectItem value="subwallet">SubWallet</SelectItem>
+
             </SelectContent>
           </Select>
         </div>

@@ -10,7 +10,9 @@ interface LayoutProps {
 
 interface WalletAccount {
   address: string;
+  evmAddress: string;
   type: "patient" | "doctor";
+  walletProvider: string;
 }
 
 const Layout = ({ children }: LayoutProps) => {
