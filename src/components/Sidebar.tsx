@@ -65,7 +65,7 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
       icon: <Calendar className="h-5 w-5" />,
       variant: currentPath === "appointments" ? "default" : "ghost",
       active: currentPath === "appointments",
-      path: "/appointment"
+      path: "/appointments"
     }
   ];
 
@@ -196,13 +196,9 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
                 onClick={() => handleNavigation(item.path)}
                 className={cn(
                   "w-full justify-start h-10 px-3 text-white",
-
-                  item.active ? "bg-sidebar-primary text-primary-foreground" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-
                   item.active
                     ? "bg-sidebar-primary text-primary-foreground"
                     : "hover:bg-sidebar-accent hover:text-white"
-
                 )}
               >
                 {item.icon}
@@ -224,13 +220,9 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
                   onClick={() => handleNavigation(item.path)}
                   className={cn(
                     "w-full justify-start h-10 px-3 text-white",
-
-                    item.active ? "bg-sidebar-primary text-primary-foreground" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-
                     item.active
                       ? "bg-sidebar-primary text-primary-foreground"
                       : "hover:bg-sidebar-accent hover:text-white"
-
                   )}
                 >
                   {item.icon}
@@ -253,13 +245,9 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
                   onClick={() => handleNavigation(item.path)}
                   className={cn(
                     "w-full justify-start h-10 px-3 text-white",
-
-                    item.active ? "bg-sidebar-primary text-primary-foreground" : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-
                     item.active
                       ? "bg-sidebar-primary text-primary-foreground"
                       : "hover:bg-sidebar-accent hover:text-white"
-
                   )}
                 >
                   {item.icon}

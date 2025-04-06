@@ -2,9 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-
-import { Wallet, UserCircle2, Stethoscope, ChevronDown } from "lucide-react";
-
+import { Wallet, UserCircle2, Stethoscope } from "lucide-react";
 import {
   Card, CardContent, CardDescription, CardFooter,
   CardHeader, CardTitle,
@@ -22,36 +20,10 @@ import { web3Enable, web3Accounts } from "@polkadot/extension-dapp";
 interface WalletAccount {
   address: string;
   type: "patient" | "doctor";
-
-  walletProvider: "phantom" | "subwallet" | "metamask";
-}
-
-// ====== Wallet Connectors ======
-const connectPhantomWallet = async (): Promise<string | null> => {
-  interface SolanaProvider {
-    isPhantom: boolean;
-    connect: () => Promise<{ publicKey: { toString: () => string } }>;
-  }
-
-  const provider = (window as Window & { solana?: SolanaProvider }).solana;
-  if (!provider || !provider.isPhantom) {
-    toast({
-      title: "Phantom Not Found",
-      description: "Please install Phantom wallet extension.",
-      variant: "destructive",
-    });
-    return null;
-  }
-  const resp = await provider.connect();
-  return resp.publicKey.toString();
-};
-
-
   walletProvider: "subwallet";
 }
 
 // ====== Wallet Connectors ======
-
 const connectSubWallet = async (): Promise<string | null> => {
   const extensions = await web3Enable("HealthChain Sentinel");
   if (extensions.length === 0) {
@@ -74,28 +46,6 @@ const connectSubWallet = async (): Promise<string | null> => {
   }
 
   return accounts[0].address;
-
-};
-
-const connectMetaMask = async (): Promise<string | null> => {
-  interface EthereumProvider {
-    isMetaMask?: boolean;
-    request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-  }
-
-  const { ethereum } = window as unknown as { ethereum?: EthereumProvider };
-  if (!ethereum || !ethereum.isMetaMask) {
-    toast({
-      title: "MetaMask Not Found",
-      description: "Please install MetaMask wallet extension.",
-      variant: "destructive",
-    });
-    return null;
-  }
-
-  const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-  return accounts?.[0] || null;
-
 };
 
 // ====== Main Component ======
@@ -103,34 +53,15 @@ export function WalletConnector() {
   const navigate = useNavigate();
   const [isConnecting, setIsConnecting] = useState(false);
   const [activeTab, setActiveTab] = useState<"patient" | "doctor">("patient");
-
-  const [walletProvider, setWalletProvider] = useState<"phantom" | "subwallet" | "metamask">("subwallet");
-
   const [walletProvider, setWalletProvider] = useState<"subwallet">("subwallet");
-
 
   const handleConnect = async () => {
     try {
       setIsConnecting(true);
       let address: string | null = null;
 
-
-      switch (walletProvider) {
-        case "phantom":
-          address = await connectPhantomWallet();
-          break;
-        case "subwallet":
-          address = await connectSubWallet();
-          break;
-        case "metamask":
-          address = await connectMetaMask();
-          break;
-        default:
-          break;
-
       if (walletProvider === "subwallet") {
         address = await connectSubWallet();
-
       }
 
       if (!address) throw new Error("Connection failed");
@@ -208,22 +139,12 @@ export function WalletConnector() {
         {/* Wallet Type Selector */}
         <div className="mt-6">
           <label className="block text-sm font-medium text-gray-700 mb-1">Select Wallet</label>
-
-          <Select value={walletProvider} onValueChange={(val: "phantom" | "subwallet" | "metamask") => setWalletProvider(val)}>
-
           <Select value={walletProvider} onValueChange={(val: "subwallet") => setWalletProvider(val)}>
-
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-
-              <SelectItem value="subwallet">SubWallet (Polkadot)</SelectItem>
-              <SelectItem value="phantom">Phantom (Solana)</SelectItem>
-              <SelectItem value="metamask">MetaMask (Ethereum)</SelectItem>
-
               <SelectItem value="subwallet">SubWallet</SelectItem>
-
             </SelectContent>
           </Select>
         </div>
