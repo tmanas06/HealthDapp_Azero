@@ -1,5 +1,5 @@
-
-import { Bell, Settings, LogOut, Wallet } from "lucide-react";
+import { LogOut, Wallet, User, Shield } from "lucide-react";
+import { Notification } from "@/components/ui/notification";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
@@ -20,7 +20,7 @@ interface HeaderProps {
 
 const Header = ({ walletAddress, userType }: HeaderProps) => {
   const navigate = useNavigate();
-  
+
   const handleLogout = () => {
     localStorage.removeItem("walletAccount");
     toast({
@@ -29,31 +29,29 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
     });
     navigate("/login");
   };
-  
-  // Format wallet address for display
+
   const formatAddress = (address?: string) => {
     if (!address) return "";
     return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
   };
-  
-  // Generate initials and avatar color based on user type
+
   const getAvatarDetails = () => {
     if (userType === "doctor") {
-      return { 
-        initials: "DR", 
+      return {
+        initials: "DR",
         bg: "bg-healthgreen-100 text-healthgreen-700",
         name: "Doctor",
-        role: "Healthcare Provider"
+        role: "Healthcare Provider",
       };
     }
-    return { 
-      initials: "PT", 
+    return {
+      initials: "PT",
       bg: "bg-healthblue-100 text-healthblue-700",
       name: "Patient",
-      role: "Healthcare User"
+      role: "Healthcare User",
     };
   };
-  
+
   const avatar = getAvatarDetails();
 
   return (
@@ -63,7 +61,7 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
           HealthChain Sentinel
         </span>
       </div>
-      
+
       <div className="flex items-center gap-4">
         {walletAddress && (
           <Button variant="outline" size="sm" className="hidden md:flex">
@@ -71,37 +69,14 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
             {formatAddress(walletAddress)}
           </Button>
         )}
-        
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute -top-1 -right-1 bg-healthorange-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">
-            3
-          </span>
-        </Button>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>System Settings</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Security</DropdownMenuItem>
-            <DropdownMenuItem>Notifications</DropdownMenuItem>
-            <DropdownMenuItem>Integrations</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        
+
+        <Notification />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2" size="sm">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className={avatar.bg}>
-                  {avatar.initials}
-                </AvatarFallback>
+                <AvatarFallback className={avatar.bg}>{avatar.initials}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-start text-sm">
                 <span className="font-medium">{avatar.name}</span>
@@ -116,12 +91,23 @@ const Header = ({ walletAddress, userType }: HeaderProps) => {
               <Wallet className="mr-2 h-4 w-4" />
               {formatAddress(walletAddress)}
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/Profile")}>
+              <User className="mr-2 h-4 w-4" />
+              Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/security")}>
+              <Shield className="mr-2 h-4 w-4" />
+              Security
+            </DropdownMenuItem>
             {userType === "doctor" ? (
-              <DropdownMenuItem>My Patients</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/patients")}>
+                My Patients
+              </DropdownMenuItem>
             ) : (
-              <DropdownMenuItem>My Medical Records</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/medical-records")}>
+                My Medical Records
+              </DropdownMenuItem>
             )}
-            <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-500" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />

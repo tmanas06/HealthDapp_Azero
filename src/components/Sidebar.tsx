@@ -68,7 +68,7 @@ const Sidebar = ({ userType = "patient" }: SidebarProps) => {
       icon: <Calendar className="h-5 w-5" />,
       variant: currentPath === "appointments" ? "default" : "ghost",
       active: currentPath === "appointments",
-      path: "/appointments"
+      path: "/appointment"
     }
   ];
   
